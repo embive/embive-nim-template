@@ -23,20 +23,19 @@ A simple program that runs inside the Embive interpreter.
 - Add Embive as a dependency
     - `$ cargo add embive`
 - Copy the example from Embive's docs/readme.
-- Swap the line `const ELF_FILE: &[u8] ...` to `const ELF_FILE: &[u8] = include_bytes!("../app.elf");`
+- Change the code to: `const ELF_FILE: &[u8] = include_bytes!("../app.elf");`
 - Copy the generated `app.elf` (inside `out` folder) to your project
 - Run it:  
     - `$ cargo run --release`
 
-## Stack Size
-By default, the stack size is set to 1024 bytes (0x400).  
-You can change this by modifying the `STACK_SIZE` variable in the [linker script](memory.ld).  
-The stack size should always be a multiple of 16 bytes.
+## Stack
+By default, the stack size is set to 2048 bytes (0x800).  
+You can change this by modifying the `STACK_SIZE` variable in the [linker script](memory.ld).
 
-## Heap Size
-By default, the heap size is set to 1024 bytes (0x400).  
-You can change this by modifying the `HEAP_SIZE` variable in the [linker script](memory.ld).  
-The heap end address will always be aligned to 16 bytes.
+## Heap
+The heap is set at the end of the memory space allocated by the application (after data and stack).  
+As such, the heap size doesn't need to be known at link time, instead being able to grow as large
+as the maximum memory available.
 
 ## RAM calculation
 You can calculate the minimum amount of RAM needed by you application with the following equation:  
@@ -49,8 +48,8 @@ To get the `data` and `bss` sizes, you can run:
 The result should be something like this:
 ```
    text    data     bss     dec     hex filename
-    360       4    2060    2424     978 out/app.elf
+    348       8    2060    2416     970 out/app.elf
 ```
 
 For this result, our minimum RAM size would be:  
-- `total_ram = 4 + 2060 = 2064 bytes`
+- `total_ram = 8 + 2060 = 2068 bytes`
