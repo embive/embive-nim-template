@@ -33,7 +33,7 @@ By default, the stack size is set to 2048 bytes (0x800).
 You can change this by modifying the `STACK_SIZE` variable in the [linker script](memory.ld).
 
 ## Heap
-The heap is set at the end of the memory space allocated by the application (after data and stack).  
+The heap is set at the end of the memory space allocated by the application (after stack and data).  
 As such, the heap size doesn't need to be known at link time, instead being able to grow as large
 as the maximum memory available.
 
@@ -48,8 +48,8 @@ To get the `data` and `bss` sizes, you can run:
 The result should be something like this:
 ```
    text    data     bss     dec     hex filename
-    348       8    2060    2416     970 out/app.elf
+    376       0    2060    2436     984 out/app.elf
 ```
 
 For this result, our minimum RAM size would be:  
-- `total_ram = 8 + 2060 = 2068 bytes`
+- `total_ram = 0 + 2060 = 2060 bytes`
